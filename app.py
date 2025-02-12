@@ -1,7 +1,5 @@
-import requests
-import json
-import gradio as gr
 import os
+import gradio as gr
 from huggingface_hub import InferenceClient
 from dotenv import load_dotenv
 
@@ -13,74 +11,70 @@ if not os.getenv("HUGGINGFACE_API_TOKEN"):
     raise ValueError("Please set HUGGINGFACE_API_TOKEN in your .env file")
 
 client = InferenceClient(
-    token=os.getenv("HUGGINGFACE_API_TOKEN")
+    token=os.getenv("HUGGINGFACE_API_TOKEN"),
+    timeout=10
 )
 
 MODELS = {
-    "gpt2": "GPT-2 (124M) - General purpose model",
-    "facebook/opt-125m": "OPT (125M) - Good for text generation",
-    "EleutherAI/pythia-160m": "Pythia (160M) - Good for code",
-    "bigscience/bloom-560m": "BLOOM (560M) - Multilingual model",
-    "microsoft/phi-1": "Phi-1 (1.3B) - Good for coding tasks"
+    "gpt2": "⚡ GPT-2 - Fastest general responses",
+    "microsoft/CodeGPT-small-py": "🐍 CodeGPT Small - Fast Python specialist",
+    "Salesforce/codegen-350M-mono": "🚀 CodeGen (350M) - Quick code generation",
 }
 
-
-# headers = {
-#     "Content-Type": "application/json",
-#     "Accept": "application/json"
-# }
-
-# history = []
-
-def generate_response(prompt, model_choice):
+def respond(message, history, model_choice):
     try:
         response = client.text_generation(
-            prompt,
+            message,
             model=model_choice,
-            max_new_tokens=400,
+            max_new_tokens=150,
             temperature=0.7,
             top_p=0.95,
             repetition_penalty=1.15,
-            do_sample=True
+            do_sample=True,
+            return_full_text=False,
         )
         return response
     except Exception as e:
-        return f"Error: {str(e)}\n Try with another model"
+        return f"❌ Error: {str(e)}\nTry selecting a different model."
+
+# Create chatbot interface
+with gr.Blocks() as interface:
+    # Model selector
+    model_choice = gr.Dropdown(
+        choices=list(MODELS.keys()),
+        value="gpt2",
+        label="🔧 Select Model",
+        info="Choose the AI model (faster models listed first)"
+    )
     
-interface = gr.Interface(
-    fn = generate_response,
-    inputs = [
-                gr.Textbox(
-                    lines=20,
-                    label="Let me know your questions!",
-                    placeholder="You can tell me the question here..."
-                ),
-                gr.Dropdown(
-                    choices=list(MODELS.keys()),
-                    value="microsoft/phi-1",
-                    label="Select Model",
-                    info="Choose the model to use"
-                )
-            ],
-            outputs = gr.Textbox(
-                label="Response",
-                lines=20,
-                max_lines=40,
-                show_copy_button=True,
-                interactive=False,
-                container=True,
-                autoscroll=True,
-                scale=2
-                ),
-    title="Code Assistant",
-    description="An AI assistant that helps you with coding questions using various Hugging Face models.",
-    theme="soft"
+    # Chatbot component
+    chatbot = gr.Chatbot(
+        height=500,  # Fixed height for scrolling
+        show_copy_button=True,  # Enable copy button
+        bubble_full_width=False,  # Makes it look more like a chat
+    )
+    
+    # Message input
+    msg = gr.Textbox(
+        label="Ask your coding question",
+        placeholder="Enter your programming question here...",
+        lines=3
+    )
+
+    # Clear button
+    clear = gr.ClearButton([msg, chatbot])
+
+    # Handle message submission
+    msg.submit(
+        respond,
+        inputs=[msg, chatbot, model_choice],
+        outputs=[chatbot],
+        queue=False
+    )
+
+# Launch the interface
+interface.launch(
+    share=True,
+    cache_examples=True,
+    show_error=True,
 )
-if __name__ == "__main__":
-    interface.launch(
-        share=False,
-        show_error=True,
-        server_name="0.0.0.0",
-        server_port=int(os.getenv("PORT", 7860)),
-        show_api=False
-        )

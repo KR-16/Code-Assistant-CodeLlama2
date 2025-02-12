@@ -74,7 +74,8 @@ with gr.Blocks() as interface:
 
 # Launch the interface
 interface.launch(
-    share=True,
-    cache_examples=True,
+    server_name="0.0.0.0",
+    server_port=7860,
+    share=False,
     show_error=True,
 )

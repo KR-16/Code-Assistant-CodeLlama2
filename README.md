@@ -1,3 +1,14 @@
+
+---
+title: Your Project Name
+emoji: 🚀
+colorFrom: blue
+colorTo: red
+sdk: gradio  # or streamlit, static, docker
+sdk_version: 3.50.2
+app_file: app.py
+pinned: false
+---
 # Code Assistant
 
 A Gradio web application that helps with coding questions using various Hugging Face models.

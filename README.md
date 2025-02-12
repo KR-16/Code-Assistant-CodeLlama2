@@ -1,6 +1,16 @@
-# Code-Assistant-CodeLlama2
+# Code Assistant
 
-This repository is a project based on the Multiprogramming code assistant app using CodeLlama2. The application leverages the capabilities of CodeLlama2 to assist users with coding-related queries and tasks.
+A Gradio web application that helps with coding questions using various Hugging Face models.
+
+## Models Available
+- GPT-2 (124M) - General purpose model
+- OPT (125M) - Good for text generation
+- Pythia (160M) - Good for code
+- BLOOM (560M) - Multilingual model
+- Phi-1 (1.3B) - Good for coding tasks
+
+## Setup
+The app requires a HUGGINGFACE_API_TOKEN environment variable to be set.
 
 ## Features
 

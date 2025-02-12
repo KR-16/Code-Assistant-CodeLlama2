@@ -1,2 +1,6 @@
 langchain
 gradio
+python-dotenv
+huggingface_hub
+transformers
+requests

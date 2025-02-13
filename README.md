@@ -1,6 +1,6 @@
 
 ---
-title: Your Project Name
+title: Code Assistant
 emoji: 🚀
 colorFrom: blue
 colorTo: red
@@ -11,6 +11,7 @@ pinned: false
 ---
 # Code Assistant
 
+[Application Demo](https://kr-16-code-assistant-codellama2.hf.space/)
 A Gradio web application that helps with coding questions using various Hugging Face models.
 
 ## Models Available

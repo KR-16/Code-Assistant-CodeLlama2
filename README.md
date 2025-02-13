@@ -1,17 +1,8 @@
 
----
-title: Code Assistant
-emoji: 🚀
-colorFrom: blue
-colorTo: red
-sdk: gradio  # or streamlit, static, docker
-sdk_version: 3.50.2
-app_file: app.py
-pinned: false
----
 # Code Assistant
 
-[Application Demo](https://kr-16-code-assistant-codellama2.hf.space/)
+## [Application Demo](https://kr-16-code-assistant-codellama2.hf.space/)
+
 A Gradio web application that helps with coding questions using various Hugging Face models.
 
 ## Models Available
